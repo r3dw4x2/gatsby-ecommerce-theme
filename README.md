@@ -1,213 +1,260 @@
-![github-banner](https://user-images.githubusercontent.com/3611928/169144953-49223b21-1e00-4607-971a-4f870468a986.svg)
+# Data Entry System with Supabase
 
-This beautiful theme from the [Matter Design Team](https://matterdesign.com.au/) gives you the styling and scaffolding for your next e-commerce site. You can customize to your heart's content and add the tooling for cart, transactions, product, and more. This theme uses:
+A modern, responsive web application for data entry built with Python Flask and Supabase database. Features a clean Bootstrap UI with full CRUD operations, form validation, and RESTful API endpoints.
 
-- [Gatsby](https://www.gatsbyjs.com/)
-- [CSS Modules](https://github.com/css-modules/css-modules)
-- [Prettier](https://prettier.io/)
-- [React Helmet](https://github.com/nfl/react-helmet)
+## Features
 
-Take a look at the screenshot below or preview the live site here: https://gatsby-ecommerce-theme.netlify.app/!
-![full page screenshot](https://res.cloudinary.com/dzkoxrsdj/image/upload/v1653371030/CleanShot_2022-05-24_at_01.11.52_2x_bspa8c.jpg)
+- ✨ **Modern UI**: Clean, responsive design with Bootstrap 5 and custom CSS
+- 🔐 **Supabase Integration**: Secure cloud database with real-time capabilities
+- 📝 **Complete CRUD**: Create, Read, Update, Delete operations
+- ✅ **Form Validation**: Client-side and server-side validation with WTForms
+- 🔌 **RESTful API**: JSON API endpoints for programmatic access
+- 📱 **Responsive Design**: Works seamlessly on desktop and mobile devices
+- 🎨 **Interactive Features**: Delete confirmations, character counters, copy-to-clipboard
 
-> 🧐 Please be aware that some aspects of this theme are not fully functional and will need to be integrated with the recommended tooling mentioned at the end of the [README](#next-steps-with-this-theme). 
+## Demo
 
-## Table of Contents:
+The application includes:
+- **Home Page**: Display all data entries in a responsive table
+- **Add Entry**: Form to create new data entries
+- **Edit Entry**: Update existing entries with pre-populated forms
+- **Delete**: Confirmation modal for safe deletion
+- **API Endpoints**: RESTful API for integration with other systems
 
-- [Quick Steps + Deploy Options](#quick-setup--deploy-option)
-  - [Cloning + Installing Packages](#cloning--installing-packages)
-- [Deploying](#deploying)
-- [Project Structure](#project-structure)
-  - [Making Changes to the Hero Component](#making-changes-to-the-hero-component)
-  - [Making Changes to the Header or Footer](#making-content-changes-to-the-header-or-footer)
-- [Testing](#testing)
-  - [Included Default Testing](#included-default-testing)
-  - [Removing Renovate](#removing-renovate)
-  - [Removing Cypress](#removing-cypress)
-- [Next Steps with This Theme](#next-steps-with-this-theme)
+## Quick Start
 
-## Quick Setup + Deploy Option
+### Prerequisites
 
-Click the button below and it will help you create a new repo, create a new Netlify project, and deploy this Theme!
+- Python 3.8 or higher
+- A Supabase account and project
+- Git (for cloning the repository)
 
-[![Deploy to Netlify](https://www.netlify.com/img/deploy/button.svg)](https://app.netlify.com/start/deploy?repository=https://github.com/netlify-templates/gatsby-ecommerce-theme&utm_source=github&utm_medium=matter-design-theme-repo&utm_campaign=template-team)
+### 1. Clone the Repository
 
-## Regular Setup
+```bash
+git clone <your-repository-url>
+cd data-entry-system
+```
 
- ### Cloning + Installing Packages
- 
-  - Clone this repo with one of these options:
+### 2. Set Up Virtual Environment
 
-    - Click the 'Use this template' button at the top of the page
-    - Via the command line:
-       ```shell
-       git clone https://github.com/netlify-templates/gatsby-ecommerce-theme/
-       ```
-    - Or you can clone the theme straight from the Netlify CLI, using the `netlify sites:create-template` command in your terminal ([learn more about this command here](https://www.netlify.com/blog/create-a-site-from-a-template-using-the-netlify-cli)) to do the entire flow for you.
+```bash
+# Create virtual environment
+python -m venv venv
 
-  From there, you can install the project's dependencies by running:
+# Activate virtual environment
+# On Windows:
+venv\Scripts\activate
+# On macOS/Linux:
+source venv/bin/activate
+```
 
-  ```shell
-  npm install or yarn install
-  ```
+### 3. Install Dependencies
 
-  Finally, you can run your project locally with:
+```bash
+pip install -r requirements.txt
+```
 
-  ```shell
-  cd gatsby-sydney-ecommerce-theme/
-  npm start or yarn start
-  ```
-  
-  or, run it using the Netlify CLI with:
-  
-  ```shell
-  netlify run dev
-  ```
-  
-  Open your browser and visit <http://localhost:5000>, your project should now be running!
-  
-  ## Deploying
- 
-  After installing and customizing your new e-commerce theme it's now time to deploy! 
-  
-   -  You can Deploy using the [Netlify CLI](https://cli.netlify.com/):
+### 4. Set Up Supabase
 
-      ```bash
-      netlify init # initialize a new Netlify project & deploy
-      ```
+1. Create a new project at [Supabase](https://supabase.com)
+2. Go to Settings → API to get your project URL and anon key
+3. In the SQL Editor, run the following SQL to create the table:
 
-   It will use the information from the included Netlify configuration file, [`netlify.toml`](./netlify.toml), to set up the build command as `gatsby build` to create a static project and locate the build project in the `public` directory.
+```sql
+CREATE TABLE IF NOT EXISTS data_entries (
+    id SERIAL PRIMARY KEY,
+    name VARCHAR(255) NOT NULL,
+    email VARCHAR(255),
+    phone VARCHAR(50),
+    category VARCHAR(100),
+    description TEXT,
+    created_at TIMESTAMP DEFAULT NOW(),
+    updated_at TIMESTAMP DEFAULT NOW()
+);
 
-   The `init` process will also set up continuous deployment for your project so that a new build will be triggered & deployed when you push code to the repo (you can change this from your project dashboard: Site Settings/Build & deploy/Continuous Deployment).
+-- Optional: Add some sample data
+INSERT INTO data_entries (name, email, phone, category, description) VALUES
+('John Doe', 'john@example.com', '+1-555-0123', 'business', 'Sample business contact'),
+('Jane Smith', 'jane@example.com', '+1-555-0124', 'personal', 'Personal contact information');
+```
 
-   You can also use `netlify deploy (--prod)` to manually deploy and `netlify open` to open your project dashboard.
+### 5. Configure Environment Variables
 
-  > 💡 we only have so many keystrokes to give, use `ntl` shorthand for `netlify` or make [an alias of your own](https://www.netlify.com/blog/2020/04/12/speed-up-productivity-with-terminal-aliases/) to save hours...of accumulated milliseconds
+1. Copy the example environment file:
+```bash
+cp .env.example .env
+```
 
-  - You can deploy within the Netlify site by connecting to git, this [video](https://www.youtube.com/watch?v=4h8B080Mv4U&t=107s) will walk you through that process. 
-  - Or, you can use the Deploy to Netlify button which will walk you through the process of spinning up a repo, creating a new project in Netlify, AND deploying it :)
+2. Edit `.env` with your Supabase credentials:
+```
+SUPABASE_URL=your_supabase_project_url_here
+SUPABASE_KEY=your_supabase_anon_key_here
+SECRET_KEY=your_secret_key_for_flask_sessions
+```
 
-[![Deploy to Netlify](https://www.netlify.com/img/deploy/button.svg)](https://app.netlify.com/start/deploy?repository=https://github.com/netlify-templates/gatsby-ecommerce-theme&utm_source=github&utm_medium=matter-design-theme-repo&utm_campaign=template-team)
+### 6. Run the Application
+
+```bash
+python app.py
+```
+
+The application will be available at `http://localhost:5000`
 
 ## Project Structure
 
-Here is a bit of an overview of the directory structure of the project:
-
-| Directory | Description |
-| :---- | :---- |
-| `src/components/` | Stores reusable elements across the site. (e.g. BlogPreview element) |
-| `src/pages/` | Stores routes for a user to go to based on each `.js` file and nested folder (e.g. `src/pages/about.js` creates a route `/about` in the web app) |
-| `src/helpers` | Stores mock data for the blog or product list and general utility functions. |
-
-### Making changes to the Hero component
-
-On the homepage of the website and a few other places, there is a full-width image component. We refer to this as the `<Hero/>` component. Here is a bit of an overview of what its API looks like:
-
-```jsx
-<Hero
-  maxWidth='500px' // how big the image's maxumim should be
-  image={'/banner1.png'} // the source location for the image
-  title={'Essentials for a cold winter'} // the main text displayed
-  subtitle={'Discover Autumn Winter 2021'} // text found below the main text
-  ctaText={'shop now'} // the presented text for a user to click on
-  ctaAction={goToShop} // the location the call-to-action text directs users
-/>
+```
+data-entry-system/
+├── app.py              # Main Flask application
+├── config.py           # Configuration and Supabase client
+├── models.py           # Data models and database operations
+├── forms.py            # WTForms for form validation
+├── requirements.txt    # Python dependencies
+├── .env.example       # Environment variables template
+├── .env               # Your environment variables (create this)
+├── README.md          # This file
+├── templates/         # HTML templates
+│   ├── base.html      # Base template with navigation
+│   ├── index.html     # Home page with entries list
+│   ├── add_entry.html # Add new entry form
+│   └── edit_entry.html # Edit entry form
+└── static/           # Static assets
+    ├── css/
+    │   └── style.css  # Custom CSS styles
+    └── js/
+        └── main.js    # JavaScript enhancements
 ```
 
-You can see it in action under [`src/pages/index.js`](./src/pages/index.js) or see the component in [`src/components/Hero/Hero.js`](./src/components/Hero/Hero.js).
+## Database Schema
 
-### Making content changes to the Header or Footer
+The `data_entries` table includes:
 
-The project contains a file named `src/config.json`. Inside of this file describes the content of the header links (`headerLinks`) as well as the footer links (`footerLinks`). For the header, each element in the array has a base structure of:
+| Column      | Type         | Description                    |
+|-------------|--------------|--------------------------------|
+| id          | SERIAL       | Primary key (auto-increment)  |
+| name        | VARCHAR(255) | Full name (required)           |
+| email       | VARCHAR(255) | Email address (optional)       |
+| phone       | VARCHAR(50)  | Phone number (optional)        |
+| category    | VARCHAR(100) | Entry category (optional)      |
+| description | TEXT         | Additional notes (optional)    |
+| created_at  | TIMESTAMP    | Created timestamp              |
+| updated_at  | TIMESTAMP    | Last updated timestamp         |
 
+## API Endpoints
+
+The application provides RESTful API endpoints:
+
+### GET /api/entries
+Get all entries
 ```json
 {
-  "menuLabel": "The label that is given to a user",
-  "menuLink": "The URL that this should take a user to"
-}
-```
-
-If you want the menu item to have a dropdown, you can also add a `category` key with the value being an array of the categories and their containing elements, here's what the base could look like:
-
-```json
-{
-  "menuLabel": "The label that is given to a user",
-  "menuLink": "The URL that this should take a user to",
-  "category": [
-    {
-      "categoryLabel": "Label you want the category to have",
-      "submenu": [
+    "success": true,
+    "data": [
         {
-          "menuLabel": "A label underneath the category",
-          "menuLink": "The associated link to this label"
+            "id": 1,
+            "name": "John Doe",
+            "email": "john@example.com",
+            "phone": "+1-555-0123",
+            "category": "business",
+            "description": "Sample business contact",
+            "created_at": "2024-01-01T10:00:00",
+            "updated_at": "2024-01-01T10:00:00"
         }
-      ]
-    }
-  ]
+    ]
 }
 ```
 
-The footer works in a similar way. It assumes each element in the array has a heading and an array of associated links to direct folks to:
-
+### POST /api/entries
+Create new entry
 ```json
-"footerLinks": [
-    {
-      "subTitle": "Label of the column in the footer",
-      "links": [
-        {
-          "text": "Text to display to the user",
-          "link": "URL of where to take the user to when clicked"
-        },
-      ]
-    }
-]
+{
+    "name": "John Doe",
+    "email": "john@example.com",
+    "phone": "+1-555-0123",
+    "category": "business",
+    "description": "Sample business contact"
+}
 ```
 
-## Testing
+### GET /api/entries/{id}
+Get single entry by ID
 
-### Included Default Testing
+### PUT /api/entries/{id}
+Update entry by ID
 
-We’ve included some tooling that helps us maintain these templates. This template currently uses:
+### DELETE /api/entries/{id}
+Delete entry by ID
 
-- [Renovate](https://www.mend.io/free-developer-tools/renovate/) - to regularly update our dependencies
-- [Cypress](https://www.cypress.io/) - to run tests against how the template runs in the browser
-- [Cypress Netlify Build Plugin](https://github.com/cypress-io/netlify-plugin-cypress) - to run our tests during our build process
+## Customization
 
-If your team is not interested in this tooling, you can remove them with ease!
+### Adding New Fields
 
-### Removing Renovate
+1. **Update the database**: Add new columns to the `data_entries` table
+2. **Update models.py**: Add the new fields to the CRUD operations
+3. **Update forms.py**: Add form fields with validation
+4. **Update templates**: Add the fields to the forms and display views
 
-In order to keep our project up-to-date with dependencies we use a tool called [Renovate](https://github.com/marketplace/renovate). If you’re not interested in this tooling, delete the `renovate.json` file and commit that onto your main branch.
+### Styling Customization
 
-### Removing Cypress
+- Edit `static/css/style.css` to customize the appearance
+- The CSS uses CSS custom properties (variables) for easy theme customization
+- Bootstrap 5 classes can be modified in the templates
 
-For our testing, we use [Cypress](https://www.cypress.io/) for end-to-end testing. This makes sure that we can validate that our templates are rendering and displaying as we’d expect. By default, we have Cypress not generate deploy links if our tests don’t pass. If you’d like to keep Cypress and still generate the deploy links, go into your `netlify.toml` and delete the plugin configuration lines:
+### Adding Authentication
 
-```diff
-[[plugins]]
-  package = "netlify-plugin-cypress"
--  [plugins.inputs.postBuild]
--    enable = true
--
--  [plugins.inputs]
--    enable = false
+To add user authentication:
+1. Install Flask-Login: `pip install Flask-Login`
+2. Set up Supabase Auth in your Supabase project
+3. Add authentication routes and middleware
+4. Update the database schema to include user associations
+
+## Deployment
+
+### Railway/Render/Heroku
+
+1. Set environment variables in your deployment platform
+2. Ensure `requirements.txt` is up to date
+3. Deploy the repository
+
+### Docker
+
+Create a `Dockerfile`:
+```dockerfile
+FROM python:3.9-slim
+WORKDIR /app
+COPY requirements.txt .
+RUN pip install -r requirements.txt
+COPY . .
+EXPOSE 5000
+CMD ["python", "app.py"]
 ```
 
-If you’d like to remove the `netlify-plugin-cypress` build plugin entirely, you’d need to delete the entire block above instead. And then make sure sure to remove the package from the dependencies using:
+## Contributing
 
-```bash
-npm uninstall -D netlify-plugin-cypress
-```
+1. Fork the repository
+2. Create a feature branch
+3. Make your changes
+4. Add tests if applicable
+5. Submit a pull request
 
-And lastly if you’d like to remove Cypress entirely, delete the entire `cypress` folder and the `cypress.config.ts` file. Then remove the dependency using:
+## License
 
-```bash
-npm uninstall cypress
-```
+This project is open source and available under the [MIT License](LICENSE).
 
-## Next Steps with this theme
+## Support
 
-This project is intended to be extended by you! We wanted to make possible to replace parts of it with your own tools and data sources. If you're interested on a direction, you can refer to Matter's [how to use section](https://gatsby-ecommerce-theme.netlify.app/how-to-use/) in this project or you may want to consider using [Matter's toolset with their JAMM framework](https://matterdesign.com.au/service/headless-commerce-with-jamm/) which includes some projects like:
-- [BigCommerce](https://bigcommerce.zfrcsk.net/c/2429593/854992/2941) for a headless e-commerce solution
-- [Builder](https://www.builder.io) as a CMS for the blog articles or other content creation
-- [Klaviyo](https://www.klaviyo.com/) for any email or SMS marketing automation
+If you encounter any issues or have questions:
+1. Check the existing issues on GitHub
+2. Create a new issue with detailed information
+3. Include error messages and steps to reproduce
+
+## Changelog
+
+### v1.0.0
+- Initial release
+- Basic CRUD operations
+- Bootstrap UI
+- Supabase integration
+- RESTful API
+- Form validation
+- Responsive design
